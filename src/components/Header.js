@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+//UI
 function Header() {
     return (
         <Head>
@@ -8,6 +9,8 @@ function Header() {
     );
 }
 
+
+//CSS
 const Head = styled.div`
     background-color: #c3cfd9;
     width: 100%;
@@ -28,4 +31,5 @@ const Title = styled.h1`
 
 `;
 
+//Export
 export default Header;
