@@ -1,4 +1,4 @@
-//Imports libs
+//Imports
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -21,7 +21,13 @@ function Catalogo () {
         <Container>
             <Text>Selecione o Filme</Text>
             <Filmes>
-                {filmes[0] ? filmes.map((value) => <Filme id={value.id} title={value.title} posterURL={value.posterURL} />) : <Carregando></Carregando>}
+                {filmes[0] ? filmes.map((value) => 
+                <Link to={`/filme/${value.id}`}>
+                    <Filme id={value.id} title={value.title} posterURL={value.posterURL} />
+                </Link>
+                ) 
+                : 
+                <Carregando></Carregando>}
             </Filmes>
         </Container>
     );
