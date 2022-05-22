@@ -21,7 +21,7 @@ function Catalogo () {
         <Container>
             <Text>Selecione o Filme</Text>
             <Filmes>
-                {filmes[0] ? filmes.map((value) => <Filme id={value.id} title={value.title} posterURL={value.posterURL} />) : <Carregando>Carregando</Carregando>}
+                {filmes[0] ? filmes.map((value) => <Filme id={value.id} title={value.title} posterURL={value.posterURL} />) : <Carregando></Carregando>}
             </Filmes>
         </Container>
     );
@@ -64,8 +64,18 @@ const Text = styled.h4`
     color: #293845;
 `;
 
-const Carregando = styled.p`
-    color: red;
+const Carregando = styled.div`
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+}
 `;
 
 //Export
