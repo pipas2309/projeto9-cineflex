@@ -56,38 +56,43 @@ function  Sessao () {
                 numeroPoltrona.push(e.name);
             }
         })
-        console.log(ingresso)
         if(ingresso.ids.length > 0) {
 
-            navigate("/sucesso", {
-                state: {
-                    ingresso, 
-                    title: filme.title, 
-                    weekday: dia.weekday,
-                    date: dia.date,
-                    numeroPoltrona
-                }
-            });
+            const promisse = axios.post('https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many',ingresso);
+            promisse.then((response => {
+                console.log(response);
+                navigate("/sucesso", {
+                    state: {
+                        ingresso, 
+                        title: filme.title, 
+                        weekday: dia.weekday,
+                        date: dia.date,
+                        numeroPoltrona
+                    }
+                });
+            }))
         }
     }
 
 
     //Logica lugares
     function lugares(id) {
-        console.log(id)
+        let alerta = true
         let atualizando = assentos.map((value) => {
             if(value.check === 'never') {
-                return {
+                 return {
                     ...value
                 };
             }
             if(value.id === id && value.check === 'not') {
+                alerta = false;
                 return {
                     ...value,
                     check: 'yes'
                 };
             }
             if(value.id === id && value.check === 'yes') {
+                alerta = false;
                 return {
                     ...value,
                     check: 'not'
@@ -97,6 +102,33 @@ function  Sessao () {
                 ...value
             };
         })
+        if(alerta) {
+            let random = [
+                "Não vai rolar 😪",
+                "No colo de alguém fica chato 🤬",
+                "Só pode sentar no colo se for do papai noel, e mesmo assim é meio estranho...",
+                "Não brow 👿, para de insistir!",
+                "Desculpe, o site não foi implementado para daltonicos, você escolheu uma poltrona ocupada.",
+                "Ocupado, escolha outra 👎",
+                "Nesse cinema não pode sentar no colo‼️",
+                "Você é desagradável, vou te dar uma cabeçada 👨‍🦲💢",
+                "Senta lá, CLAUDIA, aqui não!",
+                "O C U P A D I N H O 💅",
+                "Mindis culpi, masnun vaidá😷",
+                "Ninguém gosta de gente insistente u.u",
+                "LOTO, benhê, mas no camelô já tem a versão do mundo invertido!",
+                "Tá testando de quantas formas eu posso te dizer não?",
+                "De muitas formas, posso te dizer não!!!!!",
+                "Ou tá querendo saber se eu vou perder a paciência com sua insistencia?",
+                "Você é daqueles que roda o código sem alteração 2x esperando que na segunda vez funcione?",
+                "Você escolheu uma poltrona de alguém mais rápido, eficiente e atento que você. Pena🤷",
+                "Não é o papai noel 🎅🏽",
+                "Você pode até ter direito a 3 desejos, mas nenhum deles vai te dar esse lugar!"
+            ]
+            let escolhido = random[Math.floor(Math.random()*random.length)]
+            alerta = 1;
+            alert(escolhido)
+        }
         setAssentos([...atualizando])
     }
 

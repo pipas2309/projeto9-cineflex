@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 function Sucesso() {
     const ingresso = useLocation();
-    console.log(ingresso)
     
     //Arruma CPF
     let cpf = [];
@@ -13,7 +12,6 @@ function Sucesso() {
     for(let i = 0; i < ingresso.state.ingresso.cpf.length; i++) {
         
         let aux = ingresso.state.ingresso.cpf.split('');
-        console.log(count)
         if(count === 3 || count === 6) {
             cpf.push('.');
         }
@@ -22,7 +20,6 @@ function Sucesso() {
         }
         if(typeof(Number(aux[i])) == 'number') {
             cpf.push(aux[i])
-            console.log('oi')
         }
         count++;
     }
