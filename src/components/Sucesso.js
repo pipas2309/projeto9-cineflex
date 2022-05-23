@@ -6,26 +6,6 @@ import styled from 'styled-components';
 function Sucesso() {
     const ingresso = useLocation();
     
-    //Arruma CPF
-    let cpf = [];
-    let count = 0;
-    for(let i = 0; i < ingresso.state.ingresso.cpf.length; i++) {
-        
-        let aux = ingresso.state.ingresso.cpf.split('');
-        if(count === 3 || count === 6) {
-            cpf.push('.');
-        }
-        if(count === 9) {
-            cpf.push('-');
-        }
-        if(typeof(Number(aux[i])) == 'number') {
-            cpf.push(aux[i])
-        }
-        count++;
-    }
-    cpf = cpf.join('')
-
-
     return (
         <Container>
             <Text>Pedido feito com sucesso!</Text>
@@ -42,7 +22,7 @@ function Sucesso() {
                 <Comprador>
                     <h6>Comprador</h6>
                     <p>{`Nome: ${ingresso.state.ingresso.name}`}</p>
-                    <p>{`CPF: ${cpf}`}</p>
+                    <p>{`CPF: ${ingresso.state.ingresso.cpf}`}</p>
                 </Comprador>
             </Descricao>
             <Link to="/">

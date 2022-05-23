@@ -16,6 +16,7 @@ function  Sessao () {
     const [assentos, setAssentos] = useState([]);
     const [nome, setNome] = useState('');
     const [cpf, setCpf] = useState('');
+    const [acompanhante, setAcompanhante] = useState([]);
     const ingresso = {};
     
 
@@ -73,7 +74,6 @@ function  Sessao () {
             }))
         }
     }
-
 
     //Logica lugares
     function lugares(id) {
@@ -133,18 +133,25 @@ function  Sessao () {
     }
 
     //Lógica CPF
-    function cpfMask(value) {
-        value = value.replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
-        value = value.replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
-        value = value.replace(/(\d{3})(\d)/, '$1.$2')
-        value = value.replace(/(\d{3})(\d{1,2})/, '$1-$2')
-        value = value.replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
-        return value
-    }
     function arrumaCPF(input) {
+
+       
         let aux = cpfMask(input)
         setCpf(aux);
+
+        function cpfMask(value) {
+            value = value.replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+            value = value.replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+            value = value.replace(/(\d{3})(\d)/, '$1.$2')
+            value = value.replace(/(\d{3})(\d{1,2})/, '$1-$2')
+            value = value.replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+            return value
+        }
+
     }
+
+    //Lógica Acompanhante
+
 
     return (
         <>
@@ -169,7 +176,7 @@ function  Sessao () {
                     <input type='text' id="name" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." pattern="[A-Za-z ?]{1,}" minLength="3" required />
                     <label htmlFor="cpf">CPF do comprador:</label>
                     <input type="text" id="cpf" value={cpf} onChange={(e) => arrumaCPF(e.target.value)} placeholder="Digite seu CPF..." required/>
-                    {}
+                    {acompanhante.length > 0 ? <p>sim</p> : null}
                     <button type="submit">Reservar assento(s)</button>
                 </Form>
             </Container>
@@ -193,10 +200,8 @@ function  Sessao () {
     );
 }
 
+//Renderizar cadeiras
 function Assento ( {id, name, lugares, check} ) {
-
-
-
     let cor = '';
     let borda = '';
     if(check === 'never') {
@@ -211,8 +216,6 @@ function Assento ( {id, name, lugares, check} ) {
         cor = '#8DD7CF';
         borda = '#1AAE9E';        
     }
-
-
     return (
         <Poltrona cor={cor} borda={borda} onClick={() => lugares(id)}>
             <p>{name}</p>
@@ -220,6 +223,9 @@ function Assento ( {id, name, lugares, check} ) {
     );
 }
 
+function Acompanhantes () {
+
+}
 
 
 
