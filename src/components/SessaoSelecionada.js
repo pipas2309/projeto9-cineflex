@@ -2,15 +2,15 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 
 
 function  Sessao () {
 
     let novoAssento = [];
-    const { idFilme, idSessao} = useParams();
-    const [sessao, setSessao] = useState({});
+    const { idSessao } = useParams();
+    const [sessao, setSessao] = useState({}); //tive alguns problemas em usar poucos states, deixei para consertar depois.
     const [dia, setDia] = useState({});
     const [filme, setFilme] = useState({});
     const [assentos, setAssentos] = useState([]);
@@ -132,15 +132,28 @@ function  Sessao () {
         setAssentos([...atualizando])
     }
 
+    //Lógica CPF
+    function cpfMask(value) {
+        value = value.replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+        value = value.replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
+        value = value.replace(/(\d{3})(\d)/, '$1.$2')
+        value = value.replace(/(\d{3})(\d{1,2})/, '$1-$2')
+        value = value.replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
+        return value
+    }
+    function arrumaCPF(input) {
+        let aux = cpfMask(input)
+        setCpf(aux);
+    }
+
     return (
         <>
             <Container>
                 <Text>Selecione o(s) assento(s)</Text>
                 <Assentos>
                     <Selecao>
-                        {console.log(sessao)}
                         {sessao.id ? 
-                        assentos.map((e) => <Assento id={e.id} name={e.name} check={e.check} lugares={lugares} /> )
+                        assentos.map((e,index) => <Assento id={e.id} name={e.name} check={e.check} lugares={lugares} key={e.id + index} /> )
                         :
                         <Carregando></Carregando>}
                     </Selecao>
@@ -155,7 +168,8 @@ function  Sessao () {
                     <label htmlFor="name">Nome do comprador:</label>
                     <input type='text' id="name" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." pattern="[A-Za-z ?]{1,}" minLength="3" required />
                     <label htmlFor="cpf">CPF do comprador:</label>
-                    <input type="tel" id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="Digite seu CPF..." pattern="^(\d{11})|(([0-9]{3})[ \.\-]?([0-9]{3})[ \.\-]?([0-9]{3})[ \.\-]([0-9]{2}))$" required/>
+                    <input type="text" id="cpf" value={cpf} onChange={(e) => arrumaCPF(e.target.value)} placeholder="Digite seu CPF..." required/>
+                    {}
                     <button type="submit">Reservar assento(s)</button>
                 </Form>
             </Container>
@@ -163,7 +177,7 @@ function  Sessao () {
                 {filme.posterURL ? 
                 <>
                     <FilmeUI>
-                        <img src={filme.posterURL} />
+                        <img src={filme.posterURL} alt="Poster Filme" />
                     </FilmeUI>
                     <div>
                         <p>{filme.title}</p>

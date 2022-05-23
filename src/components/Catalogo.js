@@ -15,15 +15,16 @@ function Catalogo () {
         requisicao.then((e) => {
             setFilmes(e.data)
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     return (
         <Container>
             <Text>Selecione o Filme</Text>
             <Filmes>
-                {filmes[0] ? filmes.map((value) => 
+                {filmes[0] ? filmes.map((value, index) => 
                 <Link to={`/filme/${value.id}`}>
-                    <Filme id={value.id} title={value.title} posterURL={value.posterURL} />
+                    <Filme id={value.id} title={value.title} posterURL={value.posterURL} key={value.id + index} />
                 </Link>
                 ) 
                 : 

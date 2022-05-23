@@ -4,7 +4,7 @@ import styled from 'styled-components';
 function Filme ( {id, title, posterURL} ) {
     return (
         <FilmeUI>
-            <img src={posterURL} />
+            <img src={posterURL} alt="Poster Filme" />
         </FilmeUI>
     );
 }

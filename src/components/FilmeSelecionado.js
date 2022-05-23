@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Sessao from './Sessao';
 
 //UI
@@ -26,7 +26,7 @@ function FilmeSelecionado () {
                 <Text>Selecione o horário</Text>
                 <Sessoes>
                     {horarios[0] ? 
-                    horarios.map((value) => <Sessao weekday={value.weekday} date={value.date} showtimes={value.showtimes} />)
+                    horarios.map((value, index) => <Sessao weekday={value.weekday} date={value.date} showtimes={value.showtimes} key={idFilme + index}/>)
                     :
                     <Carregando></Carregando>
                 }
@@ -36,7 +36,7 @@ function FilmeSelecionado () {
                 {filme.posterURL ? 
                 <>
                     <FilmeUI>
-                        <img src={filme.posterURL} />
+                        <img src={filme.posterURL} alt="Poster Filme" />
                     </FilmeUI>
                     <p>{filme.title}</p>
                 </>

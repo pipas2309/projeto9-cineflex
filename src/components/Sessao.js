@@ -1,7 +1,6 @@
 //Imports
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
 
 //UI
 function Sessao( {weekday, date, showtimes} ) {
@@ -11,7 +10,7 @@ function Sessao( {weekday, date, showtimes} ) {
         <SessaoUI>
             <p>{`${weekday} - ${date}`}</p>
             <div>
-                {showtimes.map((value) => <CadaSessao idFilme={idFilme} id={value.id} hora={value.name} />)}
+                {showtimes.map((value, index) => <CadaSessao idFilme={idFilme} id={value.id} hora={value.name} key={idFilme + index + '2'}/>)}
             </div>
         </SessaoUI>
     );
