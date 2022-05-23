@@ -65,7 +65,7 @@ function  Sessao () {
                     state: {
                         ingresso, 
                         title: filme.title, 
-                        weekday: dia.weekday,
+                        sessao: sessao.name,
                         date: dia.date,
                         numeroPoltrona
                     }
@@ -138,6 +138,7 @@ function  Sessao () {
                 <Text>Selecione o(s) assento(s)</Text>
                 <Assentos>
                     <Selecao>
+                        {console.log(sessao)}
                         {sessao.id ? 
                         assentos.map((e) => <Assento id={e.id} name={e.name} check={e.check} lugares={lugares} /> )
                         :
@@ -296,6 +297,7 @@ const Poltrona = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Roboto', sans-serif;
     margin: 7px 3.5px 7px 3.5px;
 
 `;
@@ -304,6 +306,7 @@ const Legenda = styled.div`
     display: flex;
     justify-content: space-around;
     margin-top: 15px;
+    font-family: 'Roboto', sans-serif;
 
     span {
         display: flex;

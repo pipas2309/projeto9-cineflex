@@ -33,8 +33,7 @@ function Sucesso() {
                 <Filme>
                     <h6>Filme e sessão</h6>
                     <p>{ingresso.state.title}</p>
-                    <p>{ingresso.state.weekday}</p>
-                    <p>{ingresso.state.date}</p>
+                    <p>{`Dia: ${ingresso.state.date} às ${ingresso.state.sessao}` }</p>
                 </Filme>
                 <Poltrona>
                     <h6>Ingressos</h6>
