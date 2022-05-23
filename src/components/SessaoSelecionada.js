@@ -2,30 +2,103 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from 'styled-components';
 
 
 function  Sessao () {
 
+    let novoAssento = [];
     const { idFilme, idSessao} = useParams();
     const [sessao, setSessao] = useState({});
     const [dia, setDia] = useState({});
     const [filme, setFilme] = useState({});
     const [assentos, setAssentos] = useState([]);
-
+    const [nome, setNome] = useState('');
+    const [cpf, setCpf] = useState('');
+    const ingresso = {};
+    
 
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
+
         promisse.then((response) => {
-            setSessao(response.data);
+            setSessao(response.data); //arrumar isso!
             setDia(response.data.day);
             setFilme(response.data.movie);
-            setAssentos(response.data.seats);
+            novoAssento = response.data.seats.map((value) => {
+                if(value.isAvailable === false) {
+                    return {
+                        ...value,
+                        check: 'never'
+                    };
+                } else return {
+                    ...value,
+                    check: 'not'
+                }
+            })
+            setAssentos([...novoAssento]);
         });
     },[]);
 
-    console.log(assentos)
+    let navigate = useNavigate();
+
+    //logica ingresso
+    function fechar(event) {
+        event.preventDefault();
+        let numeroPoltrona = [];
+        ingresso.ids = [];
+        ingresso.name = nome;
+        ingresso.cpf = cpf;        
+        assentos.map((e) => {
+            if(e.check === 'yes') {
+                ingresso.ids.push(e.id);
+                numeroPoltrona.push(e.name);
+            }
+        })
+        console.log(ingresso)
+        if(ingresso.ids.length > 0) {
+
+            navigate("/sucesso", {
+                state: {
+                    ingresso, 
+                    title: filme.title, 
+                    weekday: dia.weekday,
+                    date: dia.date,
+                    numeroPoltrona
+                }
+            });
+        }
+    }
+
+
+    //Logica lugares
+    function lugares(id) {
+        console.log(id)
+        let atualizando = assentos.map((value) => {
+            if(value.check === 'never') {
+                return {
+                    ...value
+                };
+            }
+            if(value.id === id && value.check === 'not') {
+                return {
+                    ...value,
+                    check: 'yes'
+                };
+            }
+            if(value.id === id && value.check === 'yes') {
+                return {
+                    ...value,
+                    check: 'not'
+                };
+            }
+            return {
+                ...value
+            };
+        })
+        setAssentos([...atualizando])
+    }
 
     return (
         <>
@@ -33,8 +106,8 @@ function  Sessao () {
                 <Text>Selecione o(s) assento(s)</Text>
                 <Assentos>
                     <Selecao>
-                        {assentos[0] ? 
-                        assentos.map((e) => <Assento id={e.id} name={e.name} isAvailable={e.isAvailable} /> )
+                        {sessao.id ? 
+                        assentos.map((e) => <Assento id={e.id} name={e.name} check={e.check} lugares={lugares} /> )
                         :
                         <Carregando></Carregando>}
                     </Selecao>
@@ -45,12 +118,12 @@ function  Sessao () {
                         <span><Indisponível></Indisponível><p>Indisponível</p></span>
                     </Legenda>
                 </Assentos>
-                <Form>
+                <Form onSubmit={fechar}>
                     <label htmlFor="name">Nome do comprador:</label>
-                    <input id="name" placeholder="Digite seu nome..."/>
+                    <input type='text' id="name" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Digite seu nome..." pattern="[A-Za-z ?]{1,}" minLength="3" required />
                     <label htmlFor="cpf">CPF do comprador:</label>
-                    <input id="cpf" placeholder="Digite seu CPF"/>
-                    <button>Reservar assento(s)</button>
+                    <input type="tel" id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="Digite seu CPF..." pattern="^(\d{11})|(([0-9]{3})[ \.\-]?([0-9]{3})[ \.\-]?([0-9]{3})[ \.\-]([0-9]{2}))$" required/>
+                    <button type="submit">Reservar assento(s)</button>
                 </Form>
             </Container>
             <Footer>
@@ -73,11 +146,28 @@ function  Sessao () {
     );
 }
 
-function Assento ( {id, name, isAvailable} ) {
+function Assento ( {id, name, lugares, check} ) {
 
-    console.log(isAvailable)
+
+
+    let cor = '';
+    let borda = '';
+    if(check === 'never') {
+        cor = '#FBE192';
+        borda = '#F7C52B';
+    }
+    if(check === 'not') {
+        cor = '#C3CFD9';
+        borda = '#7B8B99';        
+    }
+    if(check === 'yes') {
+        cor = '#8DD7CF';
+        borda = '#1AAE9E';        
+    }
+
+
     return (
-        <Poltrona isAvailable={isAvailable}>
+        <Poltrona cor={cor} borda={borda} onClick={() => lugares(id)}>
             <p>{name}</p>
         </Poltrona>        
     );
@@ -153,6 +243,7 @@ const Indisponível = styled.div`
     border: 1px solid #f7c52b;
 `;
 const Selecao = styled.div`
+    max-width: 330px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -166,8 +257,8 @@ const Assentos = styled.div`
 `;
 const Poltrona = styled.div`
     border-radius: 12px;
-    border:  ${props => props.isAvailable ? "1px solid #7b8b99" : "1px solid #f7c52b" };
-    background-color: ${props => props.isAvailable ? "#c3cfd9" : "#fbe192" };
+    border: 1px solid ${props => props.borda};
+    background-color: ${props => props.cor};
     width: 26px;
     height: 26px;
     display: flex;

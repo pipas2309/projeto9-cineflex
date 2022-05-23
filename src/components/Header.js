@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 //UI
 function Header() {
+
     return (
         <Head>
             <Title>CINEFLEX</Title>

@@ -62,6 +62,7 @@ const Container =styled.div`
 `;
 
 const Sessoes = styled.div`
+    max-width: 420px;
     width: 100%;
     height: auto;
     display: flex;
@@ -69,7 +70,6 @@ const Sessoes = styled.div`
     align-self: center;
     flex-direction: column;
     padding-left: 25px;
-    margin: auto;
 `;
 
 
