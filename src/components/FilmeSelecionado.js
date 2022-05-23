@@ -33,10 +33,17 @@ function FilmeSelecionado () {
                 </Sessoes>
             </Container>
             <Footer>
-                <FilmeUI>
-                    <img src={filme.posterURL} />
-                </FilmeUI>
-                <p>{filme.title}</p>
+                {filme.posterURL ? 
+                <>
+                    <FilmeUI>
+                        <img src={filme.posterURL} />
+                    </FilmeUI>
+                    <p>{filme.title}</p>
+                </>
+                :
+                <Carregandinho></Carregandinho>
+                }
+
             </Footer>
         </>
     );
@@ -120,6 +127,22 @@ const Carregando = styled.div`
     width: 120px;
     height: 120px;
     animation: spin 2s linear infinite;
+    margin: auto;
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+}
+`;
+
+const Carregandinho = styled.div`
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+    margin: auto;
 
     @keyframes spin {
         0% { transform: rotate(0deg); }
